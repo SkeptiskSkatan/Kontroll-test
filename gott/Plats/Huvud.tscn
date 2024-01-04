@@ -1,0 +1,71 @@
+[gd_scene load_steps=10 format=3 uid="uid://dptoskl8uee3w"]
+
+[ext_resource type="Texture2D" uid="uid://bm0xico4fpkbr" path="res://Land_text/FPS-controller-assets-main/assets/textures/dev/grids/Dark/texture_07.png" id="1_sgtul"]
+[ext_resource type="Texture2D" uid="uid://c51vfam58jjed" path="res://Land_text/FPS-controller-assets-main/assets/hdris/kloofendal_48d_partly_cloudy_puresky_2k.hdr" id="2_2wbqr"]
+[ext_resource type="Script" path="res://Code/Spelare.gd" id="3_2nsi5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v5oy4"]
+albedo_texture = ExtResource("1_sgtul")
+uv1_triplanar = true
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_o52dc"]
+panorama = ExtResource("2_2wbqr")
+
+[sub_resource type="Sky" id="Sky_npbtw"]
+sky_material = SubResource("PanoramaSkyMaterial_o52dc")
+
+[sub_resource type="Environment" id="Environment_w31t5"]
+background_mode = 2
+sky = SubResource("Sky_npbtw")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4kucu"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_abrjh"]
+height = 1.2
+
+[node name="Värld" type="Node3D"]
+
+[node name="Bana" type="Node3D" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Bana"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(20, 1, 20)
+material = SubResource("StandardMaterial3D_v5oy4")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Bana"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2587, 1.99847, 0)
+use_collision = true
+size = Vector3(20, 1, 20)
+material = SubResource("StandardMaterial3D_v5oy4")
+
+[node name="Område" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Område"]
+environment = SubResource("Environment_w31t5")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Område"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Spelare" type="CharacterBody3D" parent="."]
+script = ExtResource("3_2nsi5")
+
+[node name="StåndeMänniska" type="CollisionShape3D" parent="Spelare"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_4kucu")
+
+[node name="HukandeMänniska" type="CollisionShape3D" parent="Spelare"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("CapsuleShape3D_abrjh")
+disabled = true
+
+[node name="Node3D" type="Node3D" parent="Spelare"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000659943, 1.8, -0.00612545)
+
+[node name="Camera3D" type="Camera3D" parent="Spelare/Node3D"]
+
+[node name="RayCast3D" type="RayCast3D" parent="Spelare"]
+target_position = Vector3(0, 2, 0)
